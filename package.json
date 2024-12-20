@@ -1,0 +1,43 @@
+{
+  "name": "sdi-integration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node --max-old-space-size=100000 ./dist/index.js",
+    "dev": "nodemon --exec npx ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "http-status-codes": "^2.3.0",
+    "logger": "^0.0.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.5",
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.5",
+    "sequelize-typescript": "^2.1.6",
+    "soap": "^1.1.7",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "xml-crypto": "^6.0.0",
+    "xmlbuilder": "^15.1.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/soap": "^0.18.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
