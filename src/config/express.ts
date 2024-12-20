@@ -8,14 +8,9 @@ import { errorHandler, notFoundErrorHandler } from "../middlewares/apiErrorHandl
 // import { authMiddleware } from '../middlewares/authMiddleware';
 import { apiResponseHandler } from '../middlewares/apiResponseHandler.middleware';
 import path from 'path';  // Import path module
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerOptions from './swagger';
 
 const app = express();
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // enable cros setting
 app.use(
   cors({
