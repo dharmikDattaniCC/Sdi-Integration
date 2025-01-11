@@ -5,7 +5,7 @@ import { Sequelize } from 'sequelize-typescript';
 const config = require(path.join(__dirname, '../../config/config.json'));
 
 // Determine the environment (development, production, test)
-const env = process.env.NODE_ENV || 'development';
+const env = 'development';
 
 // Get the corresponding config for the current environment
 const dbConfig = config[env];

@@ -7,13 +7,13 @@ import { logger } from "./config/logger";
 import { sequelize } from './config/database';
 import './soapServer'; // Import SOAP server logic
 
-const PORT: number = (process.env.PORT && +process.env.PORT) || 8000;
+const PORT: number = 5009;
 const server: http.Server = http.createServer(app);
 const access: mysql.ConnectionOptions = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'pobo',
 }
 
 async function startServer() {

@@ -45,9 +45,9 @@ const soapService = {
 };
 
 // Resolve WSDL Path
-const wsdlPath = process.env.WSDL_PATH
-    ? path.resolve(__dirname, process.env.WSDL_PATH)
-    : '';
+const wsdlPath = path.resolve(
+    'E:/Crest Coder/Project-Be/Sdi-Integration/src/services/TrasmissioneFatture_v1.1.wsdl'
+);
     console.log("wsdlPath", wsdlPath)
 if (!fs.existsSync(wsdlPath)) {
     throw new Error(`WSDL file not found at path: ${wsdlPath}`);

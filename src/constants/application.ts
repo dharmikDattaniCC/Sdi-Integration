@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Access the environment variable
-const jwtSecret = process.env.ACCESS_TOKEN_KEY;
-const refreshSecret = process.env.REFRESH_TOKEN_KEY;
-const emailUser = process.env.EMAIL_USER;
-const emailPass = process.env.EMAIL_PASS;
+// const jwtSecret = process.env.ACCESS_TOKEN_KEY;
+// const refreshSecret = process.env.REFRESH_TOKEN_KEY;
+// const emailUser = process.env.EMAIL_USER;
+// const emailPass = process.env.EMAIL_PASS;
 
 const base = '/api';
 
@@ -18,10 +18,10 @@ const application = {
     userTokenExpiry: '1d',
   },
   env: {
-    jwtSecret,
-    refreshSecret,
-    emailUser,
-    emailPass,
+    // jwtSecret,
+    // refreshSecret,
+    // emailUser,
+    // emailPass,
   },
   authorizationIgnorePath: [
     // add routes that you don't require token
