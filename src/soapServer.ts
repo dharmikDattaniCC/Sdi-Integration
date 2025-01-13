@@ -45,8 +45,7 @@ const soapService = {
 };
 
 // Resolve WSDL Path
-const wsdlPath = path.resolve(
-    'E:/Crest Coder/Project-Be/Sdi-Integration/src/services/TrasmissioneFatture_v1.1.wsdl'
+const wsdlPath = path.resolve('./src/services/TrasmissioneFatture_v1.1.wsdl'
 );
     console.log("wsdlPath", wsdlPath)
 if (!fs.existsSync(wsdlPath)) {

@@ -10,10 +10,10 @@ import './soapServer'; // Import SOAP server logic
 const PORT: number = 5009;
 const server: http.Server = http.createServer(app);
 const access: mysql.ConnectionOptions = {
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'pobo',
+  host: 'cp-13.webhostbox.net',
+  user: 'projej55_pobou',
+  password: '_y)mlV!}]Lg9',
+  database: 'projej55_pobo',
 }
 
 async function startServer() {

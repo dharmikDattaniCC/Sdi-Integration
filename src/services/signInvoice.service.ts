@@ -88,7 +88,7 @@ import * as fs from 'fs';
 
 export const signInvoice = async (xml: string) => {
     try {
-        const privateKey = fs.readFileSync('E:\\Crest Coder\\Project-Be\\Sdi-Integration\\src\\services\\private_key.pem', 'utf8');
+        const privateKey = fs.readFileSync('./src/services/private_key.pem', 'utf8');
         const signer = new SignedXml();
 
         // Use the incoming `xml` variable directly instead of redefining it

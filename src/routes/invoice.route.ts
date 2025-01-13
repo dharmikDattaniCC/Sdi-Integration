@@ -3,6 +3,6 @@ import { SendInvoice } from "../controllers/invoice.controller";
 
 const router = Router();
 
-router.get("/", SendInvoice);
+router.post("/", SendInvoice);
 
 export { router };
