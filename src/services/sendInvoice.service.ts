@@ -206,7 +206,7 @@ export const sendInvoice = () => {
     }
 
     // Load the WSDL file
-    const wsdlPath = path.resolve(__dirname, 'TrasmissioneFatture_v1.1.wsdl');
+    const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
     console.log("Resolved WSDL Path:", wsdlPath);
     
     // Create SOAP client
@@ -222,24 +222,20 @@ export const sendInvoice = () => {
             //     stato: 'SUCCESS',    // Example status, replace with actual
             //     signedXml: Buffer.from(signedXml).toString('base64'),  // Signed XML encoded as base64
             // };
-            const securityHeader = {
-                UsernameToken: {
-                  Username: 'soapUsername',
-                  Password: 'soapPassword',
-                },
-              };
+            // const securityHeader = {
+            //     UsernameToken: {
+            //       Username: 'soapUsername',
+            //       Password: 'soapPassword',
+            //     },
+            //   };
               
-            soapClient.addSoapHeader(securityHeader);
+            // soapClient.addSoapHeader(securityHeader);
             // Read and encode the file
             const filePath = path.resolve('./src/services/basic_structure.xml'); // Replace with the path to your XML file
             const fileContent = fs.readFileSync(filePath).toString('base64');
             const params = {
                 fileName: 'basic_structure.xml', // The name of the XML invoice file
                 fileContent: Buffer.from(fileContent).toString('base64'), // Base64-encoded content of the invoice
-                credentials: {
-                  username: 'soapUsername',
-                  password: 'soapPassword',
-                },
             };
             console.log("SOAP Request Arguments:", params);
 
@@ -247,7 +243,7 @@ export const sendInvoice = () => {
             soapClient.addHttpHeader('Authorization', `Bearer ${sdiToken}`);
 
             // Call the SOAP method
-            return soapClient.InvioFatturaElettronicaAsync(params);
+            return soapClient.SdIRiceviFileAsync(params);
         })
         .then((result) => {
             console.log("SOAP Response:", result[0]);
