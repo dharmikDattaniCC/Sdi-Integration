@@ -111,7 +111,7 @@
 
 	<wsdl:service name="TrasmissioneFatture_service">
 		<wsdl:port name="TrasmissioneFatture_port" binding="tns:TrasmissioneFatture_binding">
-			<soapbind:address location="https://cbf2-43-241-193-50.ngrok-free.app/api/invoice/send" />
+			<soapbind:address location="https://886d-152-59-39-9.ngrok-free.app/api/invoice/send" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
