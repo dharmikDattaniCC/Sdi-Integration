@@ -1,7 +1,8 @@
 import * as soap from 'soap';
 import * as path from 'path';
 import fs from 'fs';
-
+import axios, { AxiosResponse } from "axios";
+import https from 'https';
 // export const sendInvoice = async (signedXml: string) => {
 //     try {
 //         const wsdlPath = path.resolve(__dirname, 'TrasmissioneFatture_v1.1.wsdl');
@@ -195,23 +196,15 @@ import fs from 'fs';
 
 
 
-export const sendInvoice = () => {
-    // Ensure SDI Token is available
-    const sdiToken = "dummy_test_token";
-    if (!sdiToken) {
-        return Promise.reject({
-            success: false,
-            message: "SDI_TOKEN environment variable is not set."
-        });
-    }
-
+export const sendInvoice = async () => {
+    // Ensure SDI Token is available 
     // Load the WSDL file
     const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
     console.log("Resolved WSDL Path:", wsdlPath);
     
     // Create SOAP client
     return soap.createClientAsync(wsdlPath)
-        .then((soapClient) => {
+        .then(async (soapClient) => {
             // Log available services and methods
             const services = soapClient.describe();
             console.log("Available SOAP Services and Methods:", services);
@@ -238,9 +231,28 @@ export const sendInvoice = () => {
                 fileContent: Buffer.from(fileContent).toString('base64'), // Base64-encoded content of the invoice
             };
             console.log("SOAP Request Arguments:", params);
-
+            let cert_file = fs.readFileSync("./src/services/SDI-04126420043.pem")
+            let ca_file = fs.readFileSync("./src/services/SDI-04126420043.key")
+            const agent = new https.Agent({
+                requestCert: true,
+                rejectUnauthorized: true, // not for production
+                cert: cert_file,
+                ca: ca_file
+            });
+            const options = {
+                url: `https://testservizi.fatturapa.it/ricevi_file`,
+                method: "POST",
+                httpsAgent: agent,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/txt;charset=UTF-8'
+                },
+                data: params
+            };
+            const response: AxiosResponse<any> = await axios(options);
+            console.log(response.data);
             // Add authorization header
-            soapClient.addHttpHeader('Authorization', `Bearer ${sdiToken}`);
+            // soapClient.addHttpHeader('Authorization', `Bearer ${sdiToken}`);
 
             // Call the SOAP method
             return soapClient.SdIRiceviFileAsync(params);

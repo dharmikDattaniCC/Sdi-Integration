@@ -49,7 +49,7 @@
 
 	<wsdl:service name="SdIRiceviFile_service">
 		<wsdl:port name="SdIRiceviFile_port" binding="tns:SdIRiceviFile_binding">
-			<soapbind:address location="https://dc30-103-170-127-5.ngrok-free.app/api/invoice/send" />
+			<soapbind:address location="http://servizi.fatturapa.it/ricevi_file" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
