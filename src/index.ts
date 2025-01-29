@@ -7,7 +7,7 @@ import { logger } from "./config/logger";
 import { sequelize } from './config/database';
 import './soapServer'; // Import SOAP server logic
 
-const PORT: number = 5009;
+const PORT: number = 5008;
 const server: http.Server = http.createServer(app);
 
 async function startServer() {

@@ -197,83 +197,123 @@ import https from 'https';
 
 
 export const sendInvoice = async () => {
-    // Ensure SDI Token is available 
-    // Load the WSDL file
-    const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
-    console.log("Resolved WSDL Path:", wsdlPath);
-    
-    // Create SOAP client
-    return soap.createClientAsync(wsdlPath)
-        .then(async (soapClient) => {
-            // Log available services and methods
-            const services = soapClient.describe();
-            console.log("Available SOAP Services and Methods:", services);
+    try {
+        // Load the WSDL file
+        const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
+        console.log("Resolved WSDL Path:", wsdlPath);
+        const cert = fs.readFileSync("./src/services/SDI-04126420043.pem");
+        const key = fs.readFileSync("./src/services/SDI-04126420043.key");
+        // Create SOAP client
+        const soapClient = await soap.createClientAsync(wsdlPath, {
+            wsdl_options: {
+                cert: cert,
+                key: key,
+                rejectUnauthorized: false, // This is needed for self-signed certificates
+            }
+        });
+         const filePath = path.resolve('./src/services/basic_structure.xml');
+        const fileContent = fs.readFileSync(filePath).toString('base64');
+        // console.log(fileContent)
+        const params = {
+            fileName: 'basic_structure.xml',
+            file: fileContent,
+        };
+        const response = await soapClient.RiceviFile(params)
+        console.log('response',response)
+        // // Read and encode the file
 
-            // Prepare request arguments
-            // const args = {
-            //     fatturaId: '12345',  // Example invoice ID, replace with actual
-            //     stato: 'SUCCESS',    // Example status, replace with actual
-            //     signedXml: Buffer.from(signedXml).toString('base64'),  // Signed XML encoded as base64
-            // };
-            // const securityHeader = {
-            //     UsernameToken: {
-            //       Username: 'soapUsername',
-            //       Password: 'soapPassword',
-            //     },
-            //   };
-              
-            // soapClient.addSoapHeader(securityHeader);
-            // Read and encode the file
-            const filePath = path.resolve('./src/services/basic_structure.xml'); // Replace with the path to your XML file
-            const fileContent = fs.readFileSync(filePath).toString('base64');
-            const params = {
-                fileName: 'basic_structure.xml', // The name of the XML invoice file
-                fileContent: Buffer.from(fileContent).toString('base64'), // Base64-encoded content of the invoice
-            };
-            console.log("SOAP Request Arguments:", params);
-            let cert_file = fs.readFileSync("./src/services/SDI-04126420043.pem")
-            let ca_file = fs.readFileSync("./src/services/SDI-04126420043.key")
-            const agent = new https.Agent({
-                requestCert: true,
-                rejectUnauthorized: true, // not for production
-                cert: cert_file,
-                ca: ca_file
-            });
-            const options = {
-                url: `https://testservizi.fatturapa.it/ricevi_file`,
-                method: "POST",
-                httpsAgent: agent,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/txt;charset=UTF-8'
-                },
-                data: params
-            };
-            const response: AxiosResponse<any> = await axios(options);
-            console.log(response.data);
-            // Add authorization header
-            // soapClient.addHttpHeader('Authorization', `Bearer ${sdiToken}`);
+        // // Read SSL certificates
+        
 
-            // Call the SOAP method
-            return soapClient.SdIRiceviFileAsync(params);
-        })
-        .then((result) => {
-            console.log("SOAP Response:", result[0]);
+        // const agent = new https.Agent({
+        //     cert: cert,
+        //     key: key,
+        //     rejectUnauthorized: false, // This is needed for self-signed certificates
+        // });
 
+        // const options = {
+        //     url: 'https://testservizi.fatturapa.it/ricevi_file',
+        //     method: 'get',
+        //     httpsAgent: agent,
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/xml' // Changed to XML content type
+        //     },
+        //     data: params,
+        //     // validateStatus: (status: number) => true // Allow all status codes for debugging
+        // };
+
+        // // Make the request using axios
+        // const response = await axios(options);
+        // console.log('Response status:', response.status);
+        // console.log('Response data:', response.data);
+        if(response) {
             return {
                 success: true,
                 message: "Invoice successfully sent to SDI.",
-                data: result[0],  // Assuming result[0] contains the response from the SOAP service
+                data: response,
             };
-        })
-        .catch((error) => {
-            console.error("Error in Sending Invoice:", error);
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            return {
-                success: false,
-                message: "Failed to send invoice to SDI.",
-                error: errorMessage,
-            };
-        });
+        }
+
+    } catch (error: unknown) {
+        console.error("Error in Sending Invoice:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        return {
+            success: false,
+            message: "Failed to send invoice to SDI.",
+            error: errorMessage,
+        };
+    }
 };
+// export const sendInvoice = async () => {
+//     try {
+//         // Load the WSDL file
+//         const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
+//         console.log("Resolved WSDL Path:", wsdlPath);
+        
+//         // Read SSL certificates
+//         const cert = fs.readFileSync("./src/services/SDI-04126420043.pem");
+//         const key = fs.readFileSync("./src/services/SDI-04126420043.key");
+
+//         // Create SOAP client with SSL options
+//         const soapClient = await soap.createClientAsync(wsdlPath, {
+//             wsdl_options: {
+//                 cert: cert,
+//                 key: key,
+//                 rejectUnauthorized: false,
+//             }
+//         });
+
+//         // Read the XML file
+//         const filePath = path.resolve('./src/services/basic_structure.xml');
+//         const fileContent = fs.readFileSync(filePath);
+        
+//         // Prepare the SOAP request parameters
+//         const params = {
+//             FileSdIBase: {
+//                 NomeFile: 'basic_structure.xml',
+//                 File: fileContent.toString('base64')
+//             }
+//         };
+
+//         // Make the SOAP call
+//         const [result] = await soapClient.RiceviFileAsync(params);
+//         console.log('SOAP Response:', result);
+
+//         return {
+//             success: true,
+//             message: "Invoice successfully sent to SDI.",
+//             data: result,
+//         };
+
+//     } catch (error: unknown) {
+//         console.error("Error in Sending Invoice:", error);
+//         const errorMessage = error instanceof Error ? error.message : String(error);
+//         return {
+//             success: false,
+//             message: "Failed to send invoice to SDI.",
+//             error: errorMessage,
+//         };
+//     }
+// };
 
