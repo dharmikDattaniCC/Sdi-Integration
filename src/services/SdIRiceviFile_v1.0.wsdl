@@ -49,7 +49,7 @@
 
 	<wsdl:service name="SdIRiceviFile_service">
 		<wsdl:port name="SdIRiceviFile_port" binding="tns:SdIRiceviFile_binding">
-			<soapbind:address location="https://e802-43-241-194-213.ngrok-free.app/api/invoice/send" />
+			<soapbind:address location="https://fdc2-43-241-194-213.ngrok-free.app/api/invoice/send" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
