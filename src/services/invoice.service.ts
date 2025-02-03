@@ -17,7 +17,7 @@ export const InvoiceService = async () => {
         // if(signedXml){
         //     const fileContent = fs.readFileSync(signedXml).toString('base64');
         // }
-        console.log('Response from SDI:', JSON.stringify(response.error, null, 2));
+        // console.log('Response from SDI:', response);
 
         return response;
 

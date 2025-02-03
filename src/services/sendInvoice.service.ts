@@ -48,7 +48,7 @@ export const sendInvoice = async () => {
             console.log("SOAP Request XML:", xml); // Logs the actual SOAP request
         }); */
         // Load XML invoice file
-        const filePath = path.resolve('./src/services/users.xml');
+        const filePath = path.resolve('./src/services/invoice.xml');
 
         if (!fs.existsSync(filePath)) {
             throw new Error("Invoice XML file is missing.");
@@ -59,7 +59,7 @@ export const sendInvoice = async () => {
 
         // SOAP request parameters
         const params = {
-            NomeFile: 'invoice.xml',
+            NomeFile: 'IT04126420043_000001.xml',
             File: base64FileContent,
         };
 
@@ -78,7 +78,7 @@ export const sendInvoice = async () => {
 
     } catch (error) {
         console.error("Error in Sending Invoice:", error);
-        // console.log(JSON.stringify(error, null, 2));
+
         return {
             success: false,
             message: "Failed to send invoice to SDI.",
