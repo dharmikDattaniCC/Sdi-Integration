@@ -3,9 +3,19 @@ import * as path from 'path';
 import fs from 'fs';
 import axios, { AxiosInstance } from 'axios';
 import * as https from 'https';
+import { create } from 'xmlbuilder2';
+const { XMLValidator } = require('fast-xml-parser');
 
 export const sendInvoice = async () => {
     try {
+        // const xml = create({ version: '3.2', encoding: 'UTF-8' }).ele('FatturaElettronica').ele('FatturaElettronicaHeader').txt('Header Content').up().ele('FatturaElettronicaBody').txt('Body Content').up().end({ prettyPrint: true });
+
+        // console.log(xml);
+
+        // const xmlString = xml.trim();
+        // if (!XMLValidator.validate(xmlString)) {
+        //     console.error("Invalid XML format detected!");
+        // }
         // Ensure WSDL file path is resolved correctly
         const wsdlPath = path.resolve(__dirname, 'SdIRiceviFile_v1.0.wsdl');
         console.log("Resolved WSDL Path:", wsdlPath);
@@ -29,12 +39,13 @@ export const sendInvoice = async () => {
             key: key,
             cert: cert,
             ca: ca,
-            rejectUnauthorized: false // Set to false for self-signed certificates
+            rejectUnauthorized: true
         });
 
         // Create an Axios instance with the HTTPS agent
         const axiosInstance: AxiosInstance = axios.create({
-            httpsAgent: agent
+            httpsAgent: agent,
+            timeout: 1000000
         });
 
         // Create SOAP client with Axios instance as request handler
@@ -55,20 +66,21 @@ export const sendInvoice = async () => {
         }
 
         const fileContent = fs.readFileSync(filePath, 'utf-8');
-        const base64FileContent = Buffer.from(fileContent).toString('base64');
+        console.log("Type", typeof fileContent);
+        const base64FileContent = Buffer.from(fileContent.trim()).toString('base64');
 
         // SOAP request parameters
         const params = {
             NomeFile: 'IT04126420043_000001.xml',
-            File: base64FileContent,
+            File: base64FileContent.trim(),
         };
 
-        console.log("Sending SOAP request with parameters:", params);
+        // console.log("Sending SOAP request with parameters:", params);
 
         // Call the SOAP service method
         const response = await soapClient.RiceviFileAsync(params);
 
-        console.log("SOAP Response:", response);
+        // console.log("SOAP Response:", response);
 
         return {
             success: true,
@@ -77,12 +89,13 @@ export const sendInvoice = async () => {
         };
 
     } catch (error) {
-        console.error("Error in Sending Invoice:", error);
+        // console.error("Error in Sending Invoice:", error);
+        console.log('stringLog', String((error as any).response?.data?.error || error))
 
         return {
             success: false,
             message: "Failed to send invoice to SDI.",
-            error: error instanceof Error ? error.message : String(error),
+            error: error instanceof Error ? error.message : String((error as any).response?.data?.error || error),
         };
     }
 };
