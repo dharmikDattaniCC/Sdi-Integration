@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "fast-xml-parser": "^4.5.1",
     "http-status-codes": "^2.3.0",
     "logger": "^0.0.1",
     "morgan": "^1.10.0",
@@ -26,7 +27,8 @@
     "soap": "^1.1.7",
     "winston": "^3.17.0",
     "xml-crypto": "^6.0.0",
-    "xmlbuilder": "^15.1.1"
+    "xmlbuilder": "^15.1.1",
+    "xmlbuilder2": "^3.1.1"
   },
   "devDependencies": {
     "@types/axios": "^0.14.4",
