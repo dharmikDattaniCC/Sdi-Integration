@@ -6,14 +6,14 @@ export const signInvoice = async (xml: string) => {
         const crypto = require('crypto');
         const fs = require('fs');
         
-        const privateKey = fs.readFileSync('./src/services/SDI-04126420043.pem', 'utf8');
+        const privateKey = fs.readFileSync('./src/services/SDI-04126420043.key', 'utf8');
         const signer = crypto.createSign('RSA-SHA256');
         
         const xmlData = fs.readFileSync('./src/services/invoice.xml', 'utf8');
         signer.update(xmlData);
         const signature = signer.sign(privateKey, 'base64');
         
-        console.log(signature);
+        // console.log(signature);
         
 
         return {
