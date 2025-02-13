@@ -22,7 +22,7 @@ export const sendInvoice = async (signedXml: string| undefined) => {
 
         // Load SSL certificates
         const certPath = path.resolve("./src/services/SDI-04126420043.pem");
-        const keyPath = path.resolve("./src/services/SDI-04126420043.key");
+        const keyPath = path.resolve("./src/services/SDI-PKCS8-04126420043.pem");
         const caPath = path.resolve("./src/services/caentrate.pem");
 
 

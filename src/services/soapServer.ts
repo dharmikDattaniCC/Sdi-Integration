@@ -5,7 +5,7 @@ import * as path from 'path';
 
 // Load SSL certificates
 const certPath = path.resolve(__dirname,"./SDI-04126420043.pem");
-const keyPath = path.resolve(__dirname,"./SDI-04126420043.key");
+const keyPath = path.resolve(__dirname,"./SDI-PKCS8-04126420043.pem");
 const caPath = path.resolve(__dirname,"./caentrate.pem");
 
 
