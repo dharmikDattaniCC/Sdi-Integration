@@ -5,22 +5,22 @@ import fs from 'fs'
 
 export const InvoiceService = async () => {
     try {
-        console.log('Generating FatturaPA XML...');
+        // console.log('Generating FatturaPA XML...');
         // const invoiceXml = await generateInvoice();
         // console.log("invoiceXml",invoiceXml);
 
         var invoiceXml = "<library>" + "<book>" + "<name>Harry Potter</name>" + "</book>" + "</library>";
-        console.log(invoiceXml)
+        // console.log(invoiceXml)
 
 
-        console.log('Signing XML...');
+        // console.log('Signing XML...');
         const signedXml = await signInvoice(String(invoiceXml));
 
         if (!signedXml.success) {
             throw new Error(signedXml.error);
         }
 
-        console.log('Sending invoice to SDI...');
+        // console.log('Sending invoice to SDI...');
         const response = await sendInvoice(signedXml.signedXml);
         // if(signedXml){
         //     const fileContent = fs.readFileSync(signedXml).toString('base64');
