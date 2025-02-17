@@ -1,4 +1,4 @@
-import { generateInvoice } from './generateInvoice.service';
+// import { generateInvoice } from './generateInvoice.service';
 import { signInvoice } from './signInvoice.service';
 import { sendInvoice } from './sendInvoice.service';
 import fs from 'fs'
@@ -9,11 +9,19 @@ export const InvoiceService = async () => {
         // const invoiceXml = await generateInvoice();
         // console.log("invoiceXml",invoiceXml);
 
-        // console.log('Signing XML...');
-        // const signedXml = await signInvoice(String(invoiceXml));
+        var invoiceXml = "<library>" + "<book>" + "<name>Harry Potter</name>" + "</book>" + "</library>";
+        // console.log(invoiceXml)
 
-        console.log('Sending invoice to SDI...');
-        const response = await sendInvoice();
+
+        // console.log('Signing XML...');
+        const signedXml = await signInvoice(String(invoiceXml));
+
+        if (!signedXml.success) {
+            throw new Error(signedXml.error);
+        }
+
+        // console.log('Sending invoice to SDI...');
+        const response = await sendInvoice(signedXml.signedXml);
         // if(signedXml){
         //     const fileContent = fs.readFileSync(signedXml).toString('base64');
         // }

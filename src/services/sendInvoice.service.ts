@@ -6,7 +6,7 @@ import * as https from 'https';
 import { create } from 'xmlbuilder2';
 const { XMLValidator } = require('fast-xml-parser');
 
-export const sendInvoice = async () => {
+export const sendInvoice = async (signedXml: string| undefined) => {
     try {
         // const xml = create({ version: '3.2', encoding: 'UTF-8' }).ele('FatturaElettronica').ele('FatturaElettronicaHeader').txt('Header Content').up().ele('FatturaElettronicaBody').txt('Body Content').up().end({ prettyPrint: true });
 
@@ -22,7 +22,7 @@ export const sendInvoice = async () => {
 
         // Load SSL certificates
         const certPath = path.resolve("./src/services/SDI-04126420043.pem");
-        const keyPath = path.resolve("./src/services/SDI-04126420043.key");
+        const keyPath = path.resolve("./src/services/SDI-PKCS8-04126420043.pem");
         const caPath = path.resolve("./src/services/caentrate.pem");
 
 
@@ -39,7 +39,7 @@ export const sendInvoice = async () => {
             key: key,
             cert: cert,
             ca: ca,
-            rejectUnauthorized: true
+            rejectUnauthorized: false
         });
 
         // Create an Axios instance with the HTTPS agent
@@ -59,15 +59,20 @@ export const sendInvoice = async () => {
             console.log("SOAP Request XML:", xml); // Logs the actual SOAP request
         }); */
         // Load XML invoice file
-        const filePath = path.resolve('./src/services/invoice.xml');
+        // const filePath = path.resolve('./src/services/invoice.xml');
 
-        if (!fs.existsSync(filePath)) {
+        // if (!fs.existsSync(filePath)) {
+        //     throw new Error("Invoice XML file is missing.");
+        // }
+
+        // const fileContent = fs.readFileSync(filePath, 'utf-8');
+        // console.log("Type", typeof fileContent);
+        if(!signedXml){
             throw new Error("Invoice XML file is missing.");
         }
+        // const base64FileContent = Buffer.from(fileContent.trim()).toString('base64');
+        const base64FileContent = Buffer.from(signedXml.trim()).toString('base64');
 
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
-        console.log("Type", typeof fileContent);
-        const base64FileContent = Buffer.from(fileContent.trim()).toString('base64');
 
         // SOAP request parameters
         const params = {
@@ -81,6 +86,8 @@ export const sendInvoice = async () => {
         const response = await soapClient.RiceviFileAsync(params);
 
         // console.log("SOAP Response:", response);
+
+
 
         return {
             success: true,
